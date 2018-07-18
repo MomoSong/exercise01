@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE XML>
+<!-- 작성자 : 김승준 -->
+<!-- 작성일 : 2017-01-13 -->
+<!-- 꾸미기(레이아웃)에 대한 선언 -->
+<!-- 작성자 : 장한은 -->
+<!-- 작성일 : 2018-04-19 -->
+<!-- 1. web.xml에 filter를 지정해야 한다 -->
+<!-- 2. sitemesh.xml 설정: parser, mapper를 지정 -->
+<!-- 3. decorators.xml 설정: 꾸미기에 대한 설정 - 구체적인 uri 적용 (*) -->
+<!-- 4. default_decorator.jsp: decorators.xml 설정한 JSP를 만든다. -->
+<decorators defaultdir="/WEB-INF/views/decorator">
+	<!-- hello에 대한 요청이 들어오면 적용시키는 레이아웃 선언 -->
+	<decorator name="main" page="default_decorator.jsp">
+		<pattern>/</pattern>		
+		<pattern>/member/*</pattern>
+	</decorator>
+</decorators>
