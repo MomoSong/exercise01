@@ -8,9 +8,9 @@
 	SELECT * FROM b_member WHERE email = #{email} AND pw = #{pw}
 </select>
 
-<insert id="join">
-	INSERT INTO b_member(email, pw, name, hp, addr, age)
-	VALUES(#{email}, #{pw}, #{name}, #{hp}, #{addr}, #{age})
+<insert id="join" >
+	INSERT INTO b_member(email, pw, name, hp, addr, age, money)
+	VALUES(#{email}, #{pw}, #{name}, #{hp}, #{addr}, #{age}, 0)
 </insert>
 
 </mapper>

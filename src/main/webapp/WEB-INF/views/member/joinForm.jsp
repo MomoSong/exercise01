@@ -11,8 +11,32 @@ $(document).ready(function () {
 	$("#cancel").click(function(){
 		location = "/";
 	});
+	
+	$("#email").keyup(function(){
+		  var emailVal = $("#email").val();
+		  var ok = "glyphicon-ok";
+		  var no = "glyphicon-remove";
+		  if(emailVal != 0){
+			  if(isValidEmailAddress(emailVal)){
+				  $("#icon").removeClass(no);
+				  $("#icon").addClass(ok);
+			  }else{
+				  $("#icon").removeClass(ok);
+				  $("#icon").addClass(no);
+			  }
+		  }
+	  
+	});
+	
+	function isValidEmailAddress(emailAddress) {
+		var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+		return pattern.test(emailAddress);
+	}
+	
+
 });
 </script>
+
 
 </head>
 <body>
@@ -21,13 +45,14 @@ $(document).ready(function () {
   <form method="post">
     <div class="form-group">
       <label for="email">아이디:</label>
-      <input type="email" class="form-control" id="email" placeholder="아이디 입력"
-       name="email">
+      <input type="email" class="form-control " id="email" placeholder="아이디 입력"
+       name="email" ><span id="icon" class="glyphicon glyphicon-remove" ></span>
+        
     </div>
     <div class="form-group">
       <label for="pw">비밀번호:</label>
-      <input type="password" class="form-control" id="pw" placeholder="비밀번호 입력"
-       name="pw">
+      <input type="password" class="form-control" id="pw" placeholder="비밀번호 6~20 영문대소문자와 최소 1개의 숫자 혹은 특수문자를 포함하세요. "
+       name="pw"><span id="icon" class="glyphicon glyphicon-remove" ></span>
     </div>
     <div class="form-group">
       <label for="age">나이:</label>
@@ -42,7 +67,7 @@ $(document).ready(function () {
     <div class="form-group">
       <label for="hp">휴대폰 번호:</label>
       <input type="tel" class="form-control" id="hp" placeholder="휴대폰번호 입력"
-       name="hp">
+       name="hp"><span id="icon" class="glyphicon glyphicon-remove" ></span>
     </div>
     <div class="form-group">
       <label for="addr">주소입력:</label>

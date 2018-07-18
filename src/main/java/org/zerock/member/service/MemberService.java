@@ -15,4 +15,8 @@ public class MemberService {
 	public LoginDTO login(String email, String pw){
 		return dao.login(email, pw);
 	}
+
+	public void join(LoginDTO dto) {
+		dao.join(dto);
+	}
 }

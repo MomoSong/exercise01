@@ -50,8 +50,7 @@ public class MemberController {
 
 	@RequestMapping(value="/join.do", method=RequestMethod.POST)
 	public String join(LoginDTO dto) {
-		System.out.println("============================================");
-		System.out.println(dto);
+		service.join(dto);
 		return "redirect:/";
 	}
 	

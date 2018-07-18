@@ -26,6 +26,7 @@ public class MemberDao {
 	}
 
 	public void join(LoginDTO dto) {
-		sqlSession.insert(namespace+"join",dto);
+		System.out.println(getClass() + " : " + dto);
+		sqlSession.insert(namespace+"join", dto);
 	}
 }
