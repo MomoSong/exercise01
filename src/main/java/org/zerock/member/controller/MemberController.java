@@ -100,4 +100,11 @@ public class MemberController {
 		return entity;
 	}
 	
+	@RequestMapping(value = "/emailConfirm", method = RequestMethod.GET)
+	public String emailConfirm(String user_email, Model model) throws Exception { // 이메일인증
+		service.userAuth(user_email);
+		model.addAttribute("user_email", user_email);
+
+		return "/user/emailConfirm";
+	}
 }

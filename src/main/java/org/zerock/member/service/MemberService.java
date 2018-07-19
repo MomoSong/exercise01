@@ -48,5 +48,8 @@ public class MemberService {
 	sendMail.send();
 	}
 	
+	public void userAuth(String userEmail) throws Exception {
+		dao.userAuth(userEmail);
+	}
 	
 }

@@ -21,5 +21,8 @@
 	update b_member set user_authCode = #{user_authCode} where email = #{email}
 </update>
 
+<update id="userAuth">
+	update b_member set user_authStatus = 1 where email = #{email}
+</update>
 
 </mapper>

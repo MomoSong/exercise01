@@ -43,4 +43,9 @@ public class MemberDao {
 
 		sqlSession.selectOne(namespace + "createAuthKey", dto);
 	}
+	
+	public void userAuth(String user_email) throws Exception {
+		// TODO Auto-generated method stub
+		sqlSession.update(namespace + "userAuth", user_email);
+	}
 }
