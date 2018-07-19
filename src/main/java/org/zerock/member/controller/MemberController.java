@@ -54,13 +54,15 @@ public class MemberController {
 	}
 
 	@RequestMapping(value="/join.do", method=RequestMethod.POST)
-	public String join(LoginDTO dto) {
-		service.join(dto);
+	public String join(Model model, LoginDTO dto, RedirectAttributes rttr, HttpServletRequest request, HttpSession session) throws Exception {
+//		service.join(dto);
+		service.create(dto);
+		rttr.addFlashAttribute("authmsg" , "가입시 사용한 이메일로 인증해주세요.");
 		return "redirect:/";
 	}
 	
 	@RequestMapping(value="list.do", method = RequestMethod.GET)
-	public String list(Model model, Criteria cri, LoginDTO dto) {
+	public String list(Model model, Criteria cri, LoginDTO dto ) {
 		if(dto.getGrade() == 9) {
 //			model.addAttribute("list", service.list(cri));
 					
@@ -71,12 +73,12 @@ public class MemberController {
 		return "member/list";
 	}
 	
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public String RegisterPost(LoginDTO dto, Model model, RedirectAttributes rttr, HttpServletRequest request, HttpSession session) throws Exception {
-		service.create(dto);
-		rttr.addFlashAttribute("authmsg" , "가입시 사용한 이메일로 인증해주세요.");
-		return "redirect:/";
-	}
+//	@RequestMapping(value = "/join.do", method = RequestMethod.POST)
+//	public String RegisterPost(LoginDTO dto, Model model, RedirectAttributes rttr, HttpServletRequest request, HttpSession session) throws Exception {
+//		service.create(dto);
+//		rttr.addFlashAttribute("authmsg" , "가입시 사용한 이메일로 인증해주세요.");
+//		return "redirect:/";
+//	}
 	
 	@RequestMapping(value="/", method=RequestMethod.POST)
 	public ResponseEntity<String> checkEmail(@RequestBody String email){

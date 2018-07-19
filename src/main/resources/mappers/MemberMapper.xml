@@ -18,7 +18,7 @@
 </select>
 
 <update id="createAuthKey">
-	update USER set user_authCode = #{user_authCode} where email = #{email}
+	update b_member set user_authCode = #{user_authCode} where email = #{email}
 </update>
 
 
