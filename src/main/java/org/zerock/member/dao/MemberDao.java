@@ -29,4 +29,18 @@ public class MemberDao {
 		System.out.println(getClass() + " : " + dto);
 		sqlSession.insert(namespace+"join", dto);
 	}
+	
+	public String checkEmail(String email) {
+		System.out.println(email);
+		return sqlSession.selectOne(namespace + "checkEmail", email);
+	}
+	
+	public void createAuthKey(String user_email, String user_authCode) throws Exception {
+		// TODO Auto-generated method stub
+		LoginDTO dto = new LoginDTO();
+		dto.setUser_authCode(user_authCode);
+		dto.setEmail(user_email);
+
+		sqlSession.selectOne(namespace + "createAuthKey", dto);
+	}
 }

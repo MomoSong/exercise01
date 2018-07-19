@@ -5,6 +5,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Login</title>
+
+
+
 </head>
 <body>
   <div class="container col-md-6" style="float: none;">
@@ -21,6 +24,7 @@
 	       name="pw">
 	    </div>
 	    <button type="submit" class="btn">로그인</button>
+	    <button type="button" class="btn btn-info">아이디, 비밀번호 찾기</button>
 	  </form>
   </div>
 

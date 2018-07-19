@@ -13,4 +13,13 @@
 	VALUES(#{email}, #{pw}, #{name}, #{hp}, #{addr}, #{age}, 0)
 </insert>
 
+<select id="checkEmail" resultType="String">
+	SELECT email FROM b_member WHERE email = #{email}
+</select>
+
+<update id="createAuthKey">
+	update USER set user_authCode = #{user_authCode} where email = #{email}
+</update>
+
+
 </mapper>

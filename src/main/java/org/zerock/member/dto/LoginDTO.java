@@ -11,9 +11,19 @@ public class LoginDTO {
 	boolean login;
 	Date lastLog;
 	MultipartFile photo;
+	String user_authCode;
 	
 	
 	
+	public String getUser_authCode() {
+		return user_authCode;
+	}
+	public void setUser_authCode(String user_authCode) {
+		this.user_authCode = user_authCode;
+	}
+	public void setLogin(boolean login) {
+		this.login = login;
+	}
 	public boolean getLogin() {
 		return login;
 	}
@@ -97,6 +107,6 @@ public class LoginDTO {
 	public String toString() {
 		return "LoginDTO [email=" + email + ", pw=" + pw + ", name=" + name + ", hp=" + hp + ", addr=" + addr + ", age="
 				+ age + ", money=" + money + ", grade=" + grade + ", login=" + login + ", lastLog=" + lastLog
-				+ ", photo=" + photo + "]";
+				+ ", photo=" + photo + ", user_authCode=" + user_authCode + "]";
 	}
 }
