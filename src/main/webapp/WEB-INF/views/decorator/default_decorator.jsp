@@ -60,6 +60,9 @@ pageContext.setAttribute("absUri", request.getContextPath());
             <li class="nav-item">
               <a class="nav-link" href="#">공시지가 </a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">중고가구거래 </a>
+            </li>
             
            
            <c:if test="<%=dto != null %>"> 
@@ -99,7 +102,7 @@ pageContext.setAttribute("absUri", request.getContextPath());
     
   
    <!-- Page Header -->
-    <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+    <header class="masthead" style="background-image: url('/resources/img/main_bg.jpg')">
       <div class="overlay"></div>
       <div class="container">
         <div class="row">

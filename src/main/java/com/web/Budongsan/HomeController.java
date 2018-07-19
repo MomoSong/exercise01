@@ -26,7 +26,7 @@ public class HomeController {
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) throws IOException {
-		logger.info("Welcome home! The client locale is {}.", locale);
+		logger.info("부동산닷컴 메인페이지 구동.");
 		
 		return "index";
 	}
