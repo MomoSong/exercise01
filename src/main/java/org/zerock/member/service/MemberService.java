@@ -43,8 +43,8 @@ public class MemberService {
 	sendMail.setSubject("[ALMOM 서비스 이메일 인증]");
 	sendMail.setText(
 			new StringBuffer().append("<h1>메일인증</h1>").append("<a href='http://localhost/user/emailConfirm?user_email=").append(dto.getEmail()).append("&key=").append(key).append("' target='_blenk'>이메일 인증 확인</a>").toString());
-	sendMail.setFrom("호스트 이메일 아이디", "알몸개발자");
-	sendMail.setTo(dto.getEmail());
+	sendMail.setFrom("johnmor78@gmail.com", "찐따킹");
+	sendMail.setTo(dto.getEmail().trim());
 	sendMail.send();
 	}
 	
