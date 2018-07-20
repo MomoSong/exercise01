@@ -65,21 +65,23 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
-	// 로그인 스테이터스가 0인경우 인증에러 페이지로 돌아간다.
+	// 로그인 스테이터스가 0(인증이 안된경우)인경우 인증에러 페이지로 돌아간다.
 	@RequestMapping(value="/authError.do", method=RequestMethod.GET)
 	public String authError() {
 		return "member/authError";
 	}
 
+	//회원가입 주소를 입력하면 회원가입 폼으로 안내한다.
 	@RequestMapping(value="/join.do", method=RequestMethod.GET)
 	public String join() {
 		return "member/joinForm";
 	}
 
+	//회원가입 폼에서 자료를 입력해서 들어오는 컨트롤러 메서드
 	@RequestMapping(value="/join.do", method=RequestMethod.POST)
 	public String join(Model model, LoginDTO dto, RedirectAttributes rttr, HttpServletRequest request, HttpSession session) throws Exception {
 //		service.join(dto);
-		service.create(dto);
+		service.create(dto); //서비스로 dto를 보내서 회원가입을 시키고, 인증시 생성, 메일 발송을 진행한다.
 		rttr.addFlashAttribute("authmsg" , "가입시 사용한 이메일로 인증해주세요.");
 		return "redirect:/";
 	}
@@ -103,26 +105,28 @@ public class MemberController {
 //		return "redirect:/";
 //	}
 	
+	//Ajax처리를 위한 컨트롤러 함수. 이메일 중복확인시 사용한다.
 	@RequestMapping(value="/", method=RequestMethod.POST)
 	public ResponseEntity<String> checkEmail(@RequestBody String email){
 		ResponseEntity<String> entity = null;
 		
-		String result = service.checkEmail(email);
+		String result = service.checkEmail(email); //이메일이 중복되었는지 검사한다. 이미 사용중이면 이메일을 문자열로 반환한다.
 		System.out.println(result);
 		try {
 			if(result == null) {
-				entity = new ResponseEntity<>("empty", HttpStatus.OK);
+				entity = new ResponseEntity<>("empty", HttpStatus.OK); //문자열이 비어있으면 사용할 수 있는 이메일.
 			}else {
-				entity = new ResponseEntity<>("exist", HttpStatus.OK);
+				entity = new ResponseEntity<>("exist", HttpStatus.OK); //아니라면 사용할 수 없는 이메일.
 			}
 			
 		}catch (Exception e) {
 			// TODO: handle exception
-			entity = new ResponseEntity<>("error", HttpStatus.BAD_REQUEST);
+			entity = new ResponseEntity<>("error", HttpStatus.BAD_REQUEST); //에러가 났을 경우.
 		}
 		return entity;
 	}
 	
+	//발송된 이메일을 클릭했을 시에 이쪽 url을 타고 들어와서 emailConfirm.jsp의 안내를 받게 된다.
 	@RequestMapping(value = "/emailConfirm", method = RequestMethod.GET)
 	public String emailConfirm(String user_email, Model model) throws Exception { // 이메일인증
 		service.userAuth(user_email);
