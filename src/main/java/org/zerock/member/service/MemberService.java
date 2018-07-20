@@ -20,8 +20,8 @@ public class MemberService {
 	private MemberDao dao;
 	
 	//로그인을 하기위해 비밀번호와 아이디가 맞는지 조사하는 함수 DAO로 보내서 조사한다.
-	public LoginDTO login(String email, String pw){
-		return dao.login(email, pw);
+	public LoginDTO login(String email){
+		return dao.login(email);
 	}
 
 //	//dto를 전달해 회원가입을 시킨다.
@@ -63,4 +63,8 @@ public class MemberService {
 		return dao.selectUserAuth(userEmail);
 	}
 	
+	//암호화된 비밀번호를 조회해서 오는 메서드. 로그인 할 때 쓰인다.
+	public String selectCryptPw(String email) {
+		return dao.selectCryptPw(email);
+	}
 }

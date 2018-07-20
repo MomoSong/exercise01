@@ -5,7 +5,7 @@
 <mapper namespace="org.zerock.mapper.MemberMapper">
 
 <select id="login" resultType="LoginDTO">
-	SELECT * FROM b_member WHERE email = #{email} AND pw = #{pw}
+	SELECT * FROM b_member WHERE email = #{email}
 </select>
 
 <insert id="join" >
@@ -28,5 +28,10 @@
 <select id="selectUserAuth" resultType="String">
 	SELECT user_authStatus FROM b_member WHERE email = #{email}
 </select>
+
+<select id="selectCryptPw" resultType="String">
+	SELECT pw FROM b_member WHERE email = #{email}
+</select>
+
 
 </mapper>

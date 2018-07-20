@@ -6,6 +6,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +25,9 @@ public class MemberController {
 	@Inject
 	private MemberService service;
 	
+	@Inject
+	private BCryptPasswordEncoder bcryptPasswordEncoder;
+	
 	//로그아웃을 시켜준다.
 	@RequestMapping(value="/logout.do", method=RequestMethod.GET)
 	public String logout(HttpSession session) {
@@ -39,28 +44,22 @@ public class MemberController {
 	//로그인 폼에서 작성한 정보로 로그인을 시도할 때
 	@RequestMapping(value="/login.do", method=RequestMethod.POST)
 	public String login(HttpSession session, String email, String pw, RedirectAttributes rttr) throws Exception {
-		//데이터 베이스에 아이디와 비밀번호를 조회한 후에 null 값이 나오면 아이디나 비번 매칭이 안된 것으로 간주
-		LoginDTO dto = service.login(email, pw);
 		
-		if(dto == null) {
-			System.out.println("아이디나 비밀번호를 확인하세요.");
-			return "member/loginForm";
-		}
-		
-		System.out.println(dto.isUser_authStatus());
-		System.out.println("서비스 셀렉트 유저 이메일 결과 : " + service.selectUserAuth(email));
-		//데이터 베이스를 이메일로 조회한 후에 로그인 스테이터스 값에 1이 들어있으면 인증이 완료된 것으로 간주
-		if(service.selectUserAuth(email).equals("1")) {
-			dto.setUser_authStatus(true);
-			// 아이디와 비밀번호가 맞는 경우
-			dto.setLogin(true);
-			System.out.println(dto.getLogin());
-			session.setAttribute("login", dto); // 로그인 처리 -> 세션에 값을 넣는다.
-			session.setAttribute("authMsg", "이메일 인증을 해주세요!");
-		}else {
-			// 로그인 스테이터스에 0이 들어가 있는 경우
-			rttr.addFlashAttribute("msg", "메일 인증을 해주세요");
-			return "redirect:/member/authError.do";
+		if(bcryptPasswordEncoder.matches(pw, service.selectCryptPw(email))) {
+			LoginDTO dto = service.login(email);
+			//데이터 베이스를 이메일로 조회한 후에 로그인 스테이터스 값에 1이 들어있으면 인증이 완료된 것으로 간주
+			if(service.selectUserAuth(email).equals("1")) {
+				dto.setUser_authStatus(true);
+				// 아이디와 비밀번호가 맞는 경우
+				dto.setLogin(true);
+				System.out.println(dto.getLogin());
+				session.setAttribute("login", dto); // 로그인 처리 -> 세션에 값을 넣는다.
+				session.setAttribute("authmsg", "이메일 인증을 해주세요!");
+			}else {
+				// 로그인 스테이터스에 0이 들어가 있는 경우
+				rttr.addFlashAttribute("authmsg", "메일 인증을 해주세요");
+				return "redirect:/member/authError.do";
+			}
 		}
 		return "redirect:/";
 	}
@@ -81,6 +80,7 @@ public class MemberController {
 	@RequestMapping(value="/join.do", method=RequestMethod.POST)
 	public String join(Model model, LoginDTO dto, RedirectAttributes rttr, HttpServletRequest request, HttpSession session) throws Exception {
 //		service.join(dto);
+		dto.setPw(this.bcryptPasswordEncoder.encode(dto.getPw()));
 		service.create(dto); //서비스로 dto를 보내서 회원가입을 시키고, 인증시 생성, 메일 발송을 진행한다.
 		rttr.addFlashAttribute("authmsg" , "가입시 사용한 이메일로 인증해주세요.");
 		return "redirect:/";

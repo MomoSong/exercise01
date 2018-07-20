@@ -18,11 +18,9 @@ public class MemberDao {
 	private String namespace = "org.zerock.mapper.MemberMapper.";
 	
 	//로그인을 시도하면 해쉬맵에 아이디와 비밀번호를 담아서 session으로 보내준다.
-	public LoginDTO login(String email, String pw) {
-		System.out.println(email + ", " + pw);
+	public LoginDTO login(String email) {
 		Map<String, String> map = new HashMap<>();
 		map.put("email", email);
-		map.put("pw", pw);
 		return sqlSession.selectOne(namespace+"login", map);
 	}
 
@@ -59,5 +57,10 @@ public class MemberDao {
 	public String selectUserAuth(String user_email) throws Exception {
 		// TODO Auto-generated method stub
 		return sqlSession.selectOne(namespace + "selectUserAuth", user_email);
+	}
+
+	//암호화된 비밀번호를 가져오는 메서드. 로그인할 때 쓰인다.
+	public String selectCryptPw(String email) {
+		return sqlSession.selectOne(namespace + "selectCryptPw", email);
 	}
 }
