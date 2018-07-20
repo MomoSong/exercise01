@@ -42,7 +42,7 @@ public class MemberService {
 	MailHandler sendMail = new MailHandler(mailSender);
 	sendMail.setSubject("[ALMOM 서비스 이메일 인증]");
 	sendMail.setText(
-			new StringBuffer().append("<h1>메일인증</h1>").append("<a href='http://localhost/user/emailConfirm?user_email=").append(dto.getEmail()).append("&key=").append(key).append("' target='_blenk'>이메일 인증 확인</a>").toString());
+			new StringBuffer().append("<h1>메일인증</h1>").append("<a href='http://localhost/member/emailConfirm?user_email=").append(dto.getEmail()).append("&key=").append(key).append("' target='_blenk'>이메일 인증 확인</a>").toString());
 	sendMail.setFrom("johnmor78@gmail.com", "찐따킹");
 	sendMail.setTo(dto.getEmail().trim());
 	sendMail.send();
@@ -50,6 +50,10 @@ public class MemberService {
 	
 	public void userAuth(String userEmail) throws Exception {
 		dao.userAuth(userEmail);
+	}
+	
+	public String selectUserAuth(String userEmail) throws Exception {
+		return dao.selectUserAuth(userEmail);
 	}
 	
 }

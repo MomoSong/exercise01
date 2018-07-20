@@ -48,4 +48,9 @@ public class MemberDao {
 		// TODO Auto-generated method stub
 		sqlSession.update(namespace + "userAuth", user_email);
 	}
+	
+	public String selectUserAuth(String user_email) throws Exception {
+		// TODO Auto-generated method stub
+		return sqlSession.selectOne(namespace + "selectUserAuth", user_email);
+	}
 }

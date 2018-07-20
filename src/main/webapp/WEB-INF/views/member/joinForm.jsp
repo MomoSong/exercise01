@@ -13,6 +13,7 @@ $(document).ready(function () {
 	var validPw = false;
 	var validHp = false;
 	var validAll = false;
+	var checkEmail = false;
 
 	//취소 버튼을 누를시 메인 페이지로
 	$("#cancel").click(function(){
@@ -108,7 +109,16 @@ $(document).ready(function () {
 	
 	//서브밋 버튼을 실행하면 이메일, 비밀번호, 핸드폰 형식이 맞는지 확인하고 전체 칸이 다 찾는지 확인한 후에 안되면 alert을 띄우고 되었으면 전송시킨다.
 	$("#submitBtn").click(function(){
+		
+		
+		
+		if(checkEmail == false){
+			alert("이메일 중복 체크를 해주세요!");
+			return false;
+		}
+		
 		if(validEmail == true && validPw == true && validHp == true && validAll == true){
+			alert("이메일 인증을 해주세요!")
 			document.getElementById("joinForm").submit();
 		}else if(validEmail == false){
 			alert("이메일 형식을 확인하세요");
@@ -119,13 +129,16 @@ $(document).ready(function () {
 		}else{
 			for(var i = 0; i < $("input").length; i++){
 				if($(".form-control").eq(i).val() == ""){
-					alert("데이터를 입력하세요");
+					alert("빈칸을 모두 입력하세요");
 					validAll = false;
+					return false;
 				}else{
 					validAll = true;
+					
 				}
 			}
 		}
+		return; 
 	});
 	
 	// 댓글 등록 이벤트 처리
@@ -148,9 +161,11 @@ $(document).ready(function () {
 			success : function(result){
 				if(result == "empty"){
 					alert("사용 가능합니다.");
+					checkEmail = true;
 				}else{
 					alert("이미 사용중인 이메일입니다.");
 					$("#email").val("");
+					checkEmail = false;
 				}
 			}
 		});
@@ -168,7 +183,9 @@ $(document).ready(function () {
 <body>
 <div class="container">
   <h2>회원가입</h2>
-  <button id="test" type="button">디버깅용</button>
+  
+<!--   <button id="test" type="button">디버깅용</button> -->
+  
   <form method="post" id="joinForm">
     <div class="form-group">
       <label for="email">이메일 아이디:</label>

@@ -4,7 +4,7 @@
 
 <mapper namespace="org.zerock.mapper.MemberMapper">
 
-<select id="login" resultType="loginDTO">
+<select id="login" resultType="LoginDTO">
 	SELECT * FROM b_member WHERE email = #{email} AND pw = #{pw}
 </select>
 
@@ -22,7 +22,11 @@
 </update>
 
 <update id="userAuth">
-	update b_member set user_authStatus = 1 where email = #{email}
+	update b_member set user_authStatus = '1' where email = #{email}
 </update>
+
+<select id="selectUserAuth" resultType="String">
+	SELECT user_authStatus FROM b_member WHERE email = #{email}
+</select>
 
 </mapper>
