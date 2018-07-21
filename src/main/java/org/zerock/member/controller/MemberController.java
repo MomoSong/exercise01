@@ -98,13 +98,6 @@ public class MemberController {
 		return "member/list";
 	}
 	
-//	@RequestMapping(value = "/join.do", method = RequestMethod.POST)
-//	public String RegisterPost(LoginDTO dto, Model model, RedirectAttributes rttr, HttpServletRequest request, HttpSession session) throws Exception {
-//		service.create(dto);
-//		rttr.addFlashAttribute("authmsg" , "가입시 사용한 이메일로 인증해주세요.");
-//		return "redirect:/";
-//	}
-	
 	//Ajax처리를 위한 컨트롤러 함수. 이메일 중복확인시 사용한다.
 	@RequestMapping(value="/", method=RequestMethod.POST)
 	public ResponseEntity<String> checkEmail(@RequestBody String email){
@@ -133,5 +126,11 @@ public class MemberController {
 		model.addAttribute("user_email", user_email);
 
 		return "/member/emailConfirm";
+	}
+	
+	//아이디 비밀번호 찾기 버튼을 누르면, 아이디 비밀번호 찾기 페이지로 안내한다.
+	@RequestMapping(value="/searchForm.do", method = RequestMethod.GET)
+	public String searchForm() {
+		return "member/searchForm";
 	}
 }
