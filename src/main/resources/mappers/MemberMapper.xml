@@ -33,9 +33,13 @@
 	SELECT pw FROM b_member WHERE email = #{email}
 </select>
 
+<!-- 아이디 찾기시 아이디를 넘겨주는 쿼리 -->
 <select id="searchId" resultType="String">
 	SELECT id FROM b_member WHERE hp = #{newHp} AND name = #{name} AND age = #{age}
 </select>
 
+<update id="setPw">
+	UPDATE b_member SET pw = '1' WHERE email = #{email}
+</update>
 
 </mapper>
