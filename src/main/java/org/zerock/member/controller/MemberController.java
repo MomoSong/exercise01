@@ -80,7 +80,9 @@ public class MemberController {
 	@RequestMapping(value="/join.do", method=RequestMethod.POST)
 	public String join(Model model, LoginDTO dto, RedirectAttributes rttr, HttpServletRequest request, HttpSession session) throws Exception {
 //		service.join(dto);
-		dto.setPw(this.bcryptPasswordEncoder.encode(dto.getPw()));
+		
+		dto.setHp(checkHpFormat(dto.getHp())); //핸드폰 번호에서 문자를 빼고 숫자만으로 통일시켜준다.
+		dto.setPw(this.bcryptPasswordEncoder.encode(dto.getPw())); //비밀번호를 암호화해서 저장한다.
 		service.create(dto); //서비스로 dto를 보내서 회원가입을 시키고, 인증시 생성, 메일 발송을 진행한다.
 		rttr.addFlashAttribute("authmsg" , "가입시 사용한 이메일로 인증해주세요.");
 		return "redirect:/";
@@ -133,4 +135,18 @@ public class MemberController {
 	public String searchForm() {
 		return "member/searchForm";
 	}
+	
+	//핸드폰 형식을 통일해서 01012341234 처럼 숫자만 있는 형식으로 바꾼다.
+	public String checkHpFormat(String hp) {
+		String result = hp;
+		
+		if(hp.length() >= 11 && hp.length() <= 13) {
+			String reg = String.valueOf(result.charAt(3));
+			result = result.replaceAll(reg, "");
+		}else {
+			System.out.println("핸드폰 형식이 안맞습니다. 디버깅하세요.");
+		}
+		return result;
+	}
+	
 }

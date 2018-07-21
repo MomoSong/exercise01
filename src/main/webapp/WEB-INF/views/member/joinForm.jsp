@@ -103,7 +103,7 @@ $(document).ready(function () {
 	
 	//핸드폰 형식 유효성을 검사하는 정규식 함수
 	function isValidTel(tel) {
-		var pattern = new RegExp(/(\d{3}).*(\d{3}).*(\d{4})/);
+		var pattern = new RegExp(/(\d{3}).*(\d{4}).*(\d{4})/);
 		return pattern.test(tel);
 	}
 	
@@ -134,9 +134,9 @@ $(document).ready(function () {
 					return false;
 				}else{
 					validAll = true;
-					
 				}
 			}
+			$(this).click();
 		}
 		return; 
 	});
@@ -174,7 +174,13 @@ $(document).ready(function () {
 	$("#test").click(function(){
 		alert($(".form-control").eq(1).val());
 	});
-
+	
+	$("#joinForm").keypress(function(f){
+		if(f.which==13){
+			$("#joinForm").submit();
+		}
+	});
+  
 });
 </script>
 
@@ -188,36 +194,36 @@ $(document).ready(function () {
   
   <form method="post" id="joinForm">
     <div class="form-group">
-      <label for="email">이메일 아이디:</label>
+      <label for="email">이메일 아이디:</label><br/>
       <input type="email" class="form-control col-sm-4" id="email" placeholder="아이디 입력"
-       name="email" ><button type="button" class="btn btn-success" id="checkBtn">중복체크</button><span id="icon1" class="glyphicon glyphicon-remove" ></span>
-        
+       name="email" ><button type="button" class="btn btn-success" id="checkBtn">중복체크</button>
+       <span id="icon1" class="glyphicon glyphicon-remove" ></span><br/>
     </div>
     <div class="form-group">
-      <label for="pw">비밀번호:</label>
+      <label for="pw">비밀번호:</label><br/>
       <input type="password" class="form-control col-sm-4" id="pw" placeholder="비밀번호 6~20 영문대소문자와 최소 1개의 숫자 혹은 특수문자를 포함하세요. "
-       name="pw"><span id="icon2" class="glyphicon glyphicon-remove" ></span>
+       name="pw"><span id="icon2" class="glyphicon glyphicon-remove" ></span><br/>
     </div>
     <div class="form-group">
-      <label for="age">나이:</label>
+      <label for="age">나이:</label><br/>
       <input type="number" class="form-control col-sm-4" id="age" placeholder="나이 입력"
        name="age">
-    </div>
+    </div><br/>
     <div class="form-group">
-      <label for="name">이름:</label>
+      <label for="name">이름:</label><br/>
       <input type="text" class="form-control col-sm-4" id="name" placeholder="이름 입력"
        name="name">
-    </div>
+    </div><br/>
     <div class="form-group">
-      <label for="hp">휴대폰 번호:</label>
+      <label for="hp">휴대폰 번호:</label><br/>
       <input type="tel" class="form-control col-sm-4" id="hp" placeholder="휴대폰번호 입력"
-       name="hp"><span id="icon3" class="glyphicon glyphicon-remove" ></span>
+       name="hp"><span id="icon3" class="glyphicon glyphicon-remove" ></span><br/>
     </div>
     <div class="form-group">
-      <label for="addr">주소입력:</label>
+      <label for="addr">주소입력:</label><br/>
       <input type="text" class="form-control col-sm-4" id="addr" placeholder="주소 입력"
        name="addr">
-    </div>
+    </div><br/>
  
     <button type="button" id="submitBtn" class="btn btn-success">회원가입</button>
     <button type="button" id="cancel" class="btn btn-danger">취소</button>

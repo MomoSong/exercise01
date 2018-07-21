@@ -21,6 +21,12 @@ $(document).ready(function(){
 		location = "/member/searchForm.do";
 	});
 	
+	$("#loginForm").keypress(function(f){
+		if(f.which==13){
+			$("#loginForm").submit();
+		}
+	});
+	
 });
 
 </script>
@@ -31,12 +37,12 @@ $(document).ready(function(){
   	<h2>회원 로그인</h2>
 	  <form action="/member/login.do" id="loginForm" method="post">
 	    <div class="form-group">
-	      <label for="id">아이디:</label>
+	      <label for="id">아이디:</label><br/>
 	      <input type="text" class="form-control" id="email" placeholder="이메일 아이디 입력"
 	       name="email">
 	    </div>
 	    <div class="form-group">
-	      <label for="pw">비밀번호:</label>
+	      <label for="pw">비밀번호:</label><br/>
 	      <input type="password" class="form-control" id="pw" placeholder="비밀번호 입력"
 	       name="pw">
 	    </div>
