@@ -170,7 +170,7 @@ public class MemberController {
 			
 		}
 
-		return "redirect:/";
+		return "member/idPwInform";
 	}
 
 	// 핸드폰 형식을 통일해서 01012341234 처럼 숫자만 있는 형식으로 바꾼다.

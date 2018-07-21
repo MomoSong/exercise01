@@ -53,7 +53,7 @@
        name="email" >
     </div>
  	<br/>
-    <button type="button" id="submitBtn" class="btn btn-success">찾기</button>
+    <button type="submit" id="submitBtn" class="btn btn-success">찾기</button>
     
     <hr/>
     

@@ -35,7 +35,7 @@
 
 <!-- 아이디 찾기시 아이디를 넘겨주는 쿼리 -->
 <select id="searchId" resultType="String">
-	SELECT id FROM b_member WHERE hp = #{newHp} AND name = #{name} AND age = #{age}
+	SELECT email FROM b_member WHERE hp = #{newHp} AND name = #{name} AND age = #{age}
 </select>
 
 <update id="setPw">
