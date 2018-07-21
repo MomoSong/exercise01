@@ -18,11 +18,11 @@
 </select>
 
 <update id="createAuthKey">
-	update b_member set user_authCode = #{user_authCode} where email = #{email}
+	UPDATE b_member SET user_authCode = #{user_authCode} WHERE email = #{email}
 </update>
 
 <update id="userAuth">
-	update b_member set user_authStatus = '1' where email = #{email}
+	UPDATE b_member SET user_authStatus = '1' WHERE email = #{email}
 </update>
 
 <select id="selectUserAuth" resultType="String">
@@ -31,6 +31,10 @@
 
 <select id="selectCryptPw" resultType="String">
 	SELECT pw FROM b_member WHERE email = #{email}
+</select>
+
+<select id="searchId" resultType="String">
+	SELECT id FROM b_member WHERE hp = #{newHp} AND name = #{name} AND age = #{age}
 </select>
 
 

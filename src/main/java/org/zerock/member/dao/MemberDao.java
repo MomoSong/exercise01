@@ -63,4 +63,21 @@ public class MemberDao {
 	public String selectCryptPw(String email) {
 		return sqlSession.selectOne(namespace + "selectCryptPw", email);
 	}
+
+	//아이디 찾기에 사용된 DAO 메서드
+	public String searchId(String newHp, String name, String age) {
+		Map<String, String> map = new HashMap<>();
+		map.put("newHp", newHp);
+		map.put("name", name);
+		map.put("age", age);
+		return sqlSession.selectOne(namespace + "searchId", map);	
+	}
+
+	//비밀번호 찾기시 새로운 비밀번호가 암호화되어서 넘어오는데 DB에 저장해주는 메서드
+	public void setPw(String pw, String email) {
+		Map<String, String> map = new HashMap<>();
+		map.put("pw", pw);
+		map.put("email", email);
+		sqlSession.insert(namespace + "setPw", map);
+	}
 }
