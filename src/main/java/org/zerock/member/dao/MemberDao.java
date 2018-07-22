@@ -32,7 +32,6 @@ public class MemberDao {
 	
 	// 이메일 중복확인할때 DB에 존재하는 이메일인지 검사하는 함수. 메일이 있으면 메일을 반환한다.
 	public String checkEmail(String email) {
-		System.out.println(email);
 		return sqlSession.selectOne(namespace + "checkEmail", email);
 	}
 	

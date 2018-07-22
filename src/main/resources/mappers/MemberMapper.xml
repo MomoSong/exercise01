@@ -39,7 +39,7 @@
 </select>
 
 <update id="setPw">
-	UPDATE b_member SET pw = '1' WHERE email = #{email}
+	UPDATE b_member SET pw = #{pw} WHERE email = #{email}
 </update>
 
 </mapper>
