@@ -27,6 +27,26 @@ public class MemberService {
 		return dao.login(email);
 	}
 
+	//로그아웃을 하기위해 로그인 상태를 0으로 표시해주는 함수
+	public void logout(String email) {
+		dao.logout(email);
+	}
+	
+	//로그인 상태를 불러와 넘겨주는 함수, 로그인 상태는 1혹은 0
+	public int getLogin(String email) {
+		return dao.getLogin(email);
+	}
+	
+	//로그인 상태를 1로 만들어주는 함수, 1==true로 사용
+	public void setLoginTrue(String email) {
+		dao.setLoginTrue(email);
+	}
+	
+	//로그인 상태를 0으로 만들어주는 함수, 0==false로 사용
+	public void setLoginFalse(String email) {
+		dao.setLoginFalse(email);
+	}
+	
 	// 이메일 중복확인할때 DB에 존재하는 이메일인지 검사하는 함수. 메일이 있으면 메일을 반환한다. dao로 보내서 검사
 	public String checkEmail(String email) {
 		return dao.checkEmail(email);

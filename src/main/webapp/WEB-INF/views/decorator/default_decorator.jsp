@@ -69,16 +69,19 @@ pageContext.setAttribute("absUri", request.getContextPath());
             <c:choose>
             	<c:when test="<%= dto.getLogin()==true && dto.getGrade()==9 %>">
             		<li class="nav-item">
-            		  <a class="nav-link" href="/member/logout.do">로그아웃</a>
+            		  <a class="nav-link" href="/member/profile.do"><%=dto.getName() %>님</a>
+            		</li>  
+            		<li class="nav-item">
+            		  <a class="nav-link" href="/member/list.do">회원리스트</a>
             		</li>
             		<li class="nav-item">
-            		  <a class="nav-link" href="#">회원리스트</a>
-            		</li>
+            		  <a class="nav-link" href="/member/logout.do">로그아웃</a>
+            		</li>	
             	</c:when>
             	
             	<c:when test="<%= dto.getLogin()==true && dto.getGrade()==1 %>">
             		<li class="nav-item">
-            		  <a class="nav-link" href="#"><%=dto.getName() %>님</a>
+            		  <a class="nav-link" href="/member/profile.do"><%=dto.getName() %>님</a>
             		</li>
             		<li class="nav-item">
             		  <a class="nav-link" href="/member/logout.do">로그아웃</a>

@@ -21,7 +21,28 @@ public class MemberDao {
 	public LoginDTO login(String email) {
 		Map<String, String> map = new HashMap<>();
 		map.put("email", email);
+		setLoginTrue(email); //로그인 상태에 1을 넣어주는 쿼리 함수를 실행한다.
 		return sqlSession.selectOne(namespace+"login", map);
+	}
+	
+	//로그아웃 시도시에 로그인 상태를 0으로 만들어서 로그아웃을 표시해주는 함수
+	public void logout(String email) {
+		setLoginFalse(email); //로그인 상태에 0을 넣어주는 쿼리함수를 실행한다.
+	}
+	
+	//로그인 상태를 얻어와 반환해주는 함수, 상태는 1아니면 0
+	public int getLogin(String email) {
+		return sqlSession.selectOne(namespace + "getLogin", email);
+	}
+	
+	//현재 로그인 상태를 1로 만들어줘서 로그인 됨을 알려주는 함수 
+	public void setLoginTrue(String email) {
+		sqlSession.update(namespace + "setLoginTrue", email);
+	}
+	
+	//현재 로그인 상태를 0으로 만들어 로그아웃 되었음을 나타내주는 함수
+	public void setLoginFalse(String email) {
+		sqlSession.update(namespace + "setLoginFalse", email);
 	}
 
 	//dto를 DB에 보내서 회원가입을 한다.

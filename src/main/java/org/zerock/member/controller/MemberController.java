@@ -11,9 +11,9 @@ import javax.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,6 +35,14 @@ public class MemberController {
 	// 로그아웃을 시켜준다.
 	@RequestMapping(value = "/logout.do", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
+		//세션에 담긴 login 네임으로 dto를 얻어온다.
+		LoginDTO dto = (LoginDTO)session.getAttribute("login");
+		//로그인 상태를 0으로 만들어 로그아웃 해주기 위해서 email을 전달한다.
+		service.logout(dto.getEmail());
+		//DB의 로그인 상태를 0으로 만들어준다.
+		service.setLoginFalse(dto.getEmail());
+		//dto의 로그인 상태를 false로 만들어준다. 
+		dto.setLogin(getLoginStatus(dto.getEmail()));
 		session.invalidate(); // 세션을 지운다. -> 로그아웃
 		return "redirect:/";
 	}
@@ -48,20 +56,23 @@ public class MemberController {
 	// 로그인 폼에서 작성한 정보로 로그인을 시도할 때
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public String login(HttpSession session, String email, String pw, RedirectAttributes rttr) throws Exception {
-
+		//입력한 raw비밀번호와 DB에 들어있는 암호화된 비밀번호가 일치하는 경우 true
 		if (bcryptPasswordEncoder.matches(pw, service.selectCryptPw(email))) {
+			//dto에 개인 정보를 모두 담아 준다
 			LoginDTO dto = service.login(email);
-			// 데이터 베이스를 이메일로 조회한 후에 로그인 스테이터스 값에 1이 들어있으면 인증이 완료된 것으로 간주
+			System.out.println(dto);
+			// 데이터 베이스를 이메일로 조회한 후에 유저인증상태 값에 1이 들어있으면 이미 이메일 인증이 완료된 것으로 간주
 			if (service.selectUserAuth(email).equals("1")) {
+				//유저 인증 상태를 True로 세팅해준다.
 				dto.setUser_authStatus(true);
-				// 아이디와 비밀번호가 맞는 경우
-				dto.setLogin(true);
+				//유저 로그인 상태도 true로 만들어준다. getLoginStatus함수를 불러와 1또는 0인지 값을 조사한 후에 불린값으로 대입
+				dto.setLogin(getLoginStatus(email));
 				System.out.println(dto.getLogin());
 				session.setAttribute("login", dto); // 로그인 처리 -> 세션에 값을 넣는다.
-				session.setAttribute("authmsg", "이메일 인증을 해주세요!");
 			} else {
-				// 로그인 스테이터스에 0이 들어가 있는 경우
+				// 유저 인증상태 값에 0이 들어가 있는 경우 메일 인증을 안한 것으로 간주한다.
 				rttr.addFlashAttribute("authmsg", "메일 인증을 해주세요");
+				// 메일 인증을 안내하는 페이지로 안내한다.
 				return "redirect:/member/authError.do";
 			}
 		}
@@ -85,11 +96,11 @@ public class MemberController {
 	public String join(Model model, LoginDTO dto, RedirectAttributes rttr, HttpServletRequest request,
 			HttpSession session) throws Exception {
 		// service.join(dto);
-
+		
 		dto.setHp(checkHpFormat(dto.getHp())); // 핸드폰 번호에서 문자를 빼고 숫자만으로 통일시켜준다.
 		dto.setPw(this.bcryptPasswordEncoder.encode(dto.getPw())); // 비밀번호를 암호화해서 저장한다.
-		service.create(dto); // 서비스로 dto를 보내서 회원가입을 시키고, 인증시 생성, 메일 발송을 진행한다.
-		rttr.addFlashAttribute("authmsg", "가입시 사용한 이메일로 인증해주세요.");
+		service.create(dto); // 서비스로 dto를 보내서 회원가입을 시키고, 인증키 생성 DB에 저장, 메일 발송을 진행한다.
+		rttr.addFlashAttribute("authmsg", "가입시 사용한 이메일로 인증해주세요."); //alert를 띄워서 안내
 		return "redirect:/";
 	}
 
@@ -98,11 +109,9 @@ public class MemberController {
 	public String list(Model model, Criteria cri, LoginDTO dto) {
 		if (dto.getGrade() == 9) {
 			// model.addAttribute("list", service.list(cri));
-
 		} else {
 			model.addAttribute("list", "관리자만 접근 가능합니다.");
 		}
-
 		return "member/list";
 	}
 
@@ -119,7 +128,6 @@ public class MemberController {
 			} else {
 				entity = new ResponseEntity<>("exist", HttpStatus.OK); // 아니라면 사용할 수 없는 이메일.
 			}
-
 		} catch (Exception e) {
 			// TODO: handle exception
 			entity = new ResponseEntity<>("error", HttpStatus.BAD_REQUEST); // 에러가 났을 경우.
@@ -132,7 +140,6 @@ public class MemberController {
 	public String emailConfirm(String user_email, Model model) throws Exception { // 이메일인증
 		service.userAuth(user_email);
 		model.addAttribute("user_email", user_email);
-
 		return "/member/emailConfirm";
 	}
 
@@ -180,29 +187,49 @@ public class MemberController {
 	// 핸드폰 형식을 통일해서 01012341234 처럼 숫자만 있는 형식으로 바꾼다.
 	public String checkHpFormat(String hp) {
 		String result = hp;
-
+		//hp의 길이가 11자리이면 문자없이 숫자만으로 이루어진 경우, 13자리이면 도중에 '-', '.'이 들어간 경우
 		if (hp.length() > 11 && hp.length() <= 13) {
-			String reg = String.valueOf(result.charAt(3));
+			//11보다 긴 hp이면 3번째 문자 (즉, '-'나 '.'등)을 reg에 저장한다.
+			String reg = String.valueOf(result.charAt(3)); 
+			//reg문자를 모두 제거한다
 			result = result.replaceAll(reg, "");
 		} else {
+			//제이쿼리 정규식을 벗어난 핸드폰 번호가 맞게 들어온경우, 정규식 디버깅이 필요
 			System.out.println("핸드폰 형식이 안맞습니다. 디버깅하세요.");
 		}
 		return result;
 	}
 	
-	//비밀번호 찾기를 눌렀을 때 무작위 비밀번호를 생성해서 전달해주는 함수
-	public String randPw() {
-		String result = "";
+	//비밀번호 찾기를 눌렀을 때 무작위 비밀번호를 생성해서 전달해주는 함수(컨트롤러에서만 사용하므로 private)
+	private String randPw() {
+		String result = ""; 
 		Random rand = new Random();
-		
-		rand.nextInt();
-		for(int i = 0; i < 13; i++) {
-			 char ch = (char) (rand.nextInt(26) + 65);
-			 System.out.println("아스키 코드 : " + ch);
+		for(int i = 0; i < 13; i++) { //임의로 13자리의 비밀번호를 생성하기 위한 for문
+			//0~25 (알파벳 갯수) + 65 (아스키코드 65번부터 영어 대문자시작) =>A~Z까지 한 문자씩 임의로 생성
+			 char ch = (char) (rand.nextInt(25) + 65); 			 
+			 //결과에 13자리 문자를 더해준다.
 			 result +=  String.valueOf(ch);
 		}
 		System.out.println(result);
 		return result;
 	}
+	
+	//로그인 상태를 조사해서 1이면 true 그외의 숫자면 false를 반환한다. dto의 boolean login변수 값을 설정하는데 사용
+	private boolean getLoginStatus(String email) {
+		if(service.getLogin(email) == 1) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	//메인화면에서 회원 이름을 클릭했을 때 회원 정보를 볼 수 있는 페이지로 이동시키는 함수
+	@RequestMapping(value="/profile.do", method=RequestMethod.GET)
+	public String profile(Model model) {
+		
+		return "member/profile";
+	}
+	
+	
 
 }
