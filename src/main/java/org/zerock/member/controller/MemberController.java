@@ -60,14 +60,12 @@ public class MemberController {
 		if (bcryptPasswordEncoder.matches(pw, service.selectCryptPw(email))) {
 			//dto에 개인 정보를 모두 담아 준다
 			LoginDTO dto = service.login(email);
-			System.out.println(dto);
 			// 데이터 베이스를 이메일로 조회한 후에 유저인증상태 값에 1이 들어있으면 이미 이메일 인증이 완료된 것으로 간주
 			if (service.selectUserAuth(email).equals("1")) {
 				//유저 인증 상태를 True로 세팅해준다.
 				dto.setUser_authStatus(true);
 				//유저 로그인 상태도 true로 만들어준다. getLoginStatus함수를 불러와 1또는 0인지 값을 조사한 후에 불린값으로 대입
 				dto.setLogin(getLoginStatus(email));
-				System.out.println(dto.getLogin());
 				session.setAttribute("login", dto); // 로그인 처리 -> 세션에 값을 넣는다.
 			} else {
 				// 유저 인증상태 값에 0이 들어가 있는 경우 메일 인증을 안한 것으로 간주한다.
@@ -225,8 +223,13 @@ public class MemberController {
 	
 	//메인화면에서 회원 이름을 클릭했을 때 회원 정보를 볼 수 있는 페이지로 이동시키는 함수
 	@RequestMapping(value="/profile.do", method=RequestMethod.GET)
-	public String profile(Model model) {
-		
+	public String profile() {
+		return "member/profile";
+	}
+	
+	//메인화면에서 회원 이름을 클릭했을 때 회원 정보를 볼 수 있는 페이지로 이동시키는 함수
+	@RequestMapping(value="/profile.do", method=RequestMethod.POST)
+	public String profile(Model model, LoginDTO dto) {
 		return "member/profile";
 	}
 	
