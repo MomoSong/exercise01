@@ -9,9 +9,7 @@
 <title>아이디 안내</title>
 </head>
 <body>
-		
-	
-	
+
 	<div class="container">
 	  <div class="jumbotron">
 	    <c:if test="${not empty id }">
